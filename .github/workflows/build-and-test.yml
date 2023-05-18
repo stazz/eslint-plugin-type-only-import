@@ -1,0 +1,99 @@
+name: Build, test, and publish
+
+on:
+  workflow_call:
+    inputs:
+      fetch-depth:
+        required: true
+        type: number
+      pre-run-function:
+        required: false
+        type: string
+        default: |
+          lr_pre_run ()
+          {
+            echo 'No pre-run.'
+          }
+      post-run-function:
+        required: false
+        type: string
+        default: |
+          lr_post_run ()
+          {
+            cp ./LICENSE ./LICENSE.txt
+            # Note - yarn doesn't have functionality to install package without saving it to package.json (!)
+            # So we use global install instead.
+            yarn global add "@jsdevtools/npm-publish@$(cat ./versions/npm-publish)"
+            npm-publish --dry-run --access public
+          }
+    secrets:
+      npm-publish-token:
+        required: false
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+    name: Build and test
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: ${{ inputs.fetch-depth }}
+
+      - id: prepare
+        name: Prepare
+        shell: bash
+        run: |
+          set -e
+
+          ${{ inputs.pre-run-function }}
+          lr_pre_run
+
+      - id: install
+        name: Install dependencies of
+        shell: bash
+        run: |
+          set -e
+
+          ./scripts/install.sh --frozen-lockfile
+
+      - id: test
+        name: Test
+        shell: bash
+        run: |
+          set -e
+
+          ./scripts/test.sh coverage
+
+      - id: lint
+        name: Lint
+        shell: bash
+        run: |
+          set -e
+          
+          ./scripts/lint.sh
+
+      # Run build *after* tests - since tests no longer require transpiled JS to run
+      # We still want to run build to catch any TS error possibly lurking somewhere.
+      - id: compile
+        name: Compile
+        shell: bash
+        run: |
+          set -e
+
+          ./scripts/build.sh ci
+          
+
+      # - id: coverage
+      #   name: Upload coverage
+      #   uses: codecov/codecov-action@v3
+
+      - id: finalize
+        name: Finalize
+        shell: bash
+        run: |
+          set -e
+
+          ${{ inputs.post-run-function }}
+          lr_post_run
+        env:
+          NPM_PUBLISH_TOKEN: ${{ secrets.npm-publish-token }}
