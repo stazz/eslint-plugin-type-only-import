@@ -25,7 +25,9 @@ Assuming the plugin would be configured to add `type` modifier to all imports/ex
 |          `import * as code from "./code"`          | :ballot_box_with_check: |                                           Target string literal does not match given pattern and thus the statement is unaffected.                                            |
 |    `import type * as code from "./code.types"`     |   :white_check_mark:    |                                                                                                                                                                               |
 | `import * as code, { type X } from "./code.types"` |           :x:           |                                                            `import type * as code, { type X } from "./code.types"`                                                            |
-| `import type * as code, { x } from "./code.types"` |           :x:           |                                                            `import type * as code, { type x } from "./code.types"`                                                            |
+| `import type * as code, { X } from "./code.types"` |           :x:           |                                                            `import type * as code, { type X } from "./code.types"`                                                            |
+|      `import type { X } from "./code.types"`       |   :white_check_mark:    |                                                                                                                                                                               |
+|      `import { type X } from "./code.types"`       |   :white_check_mark:    |                                                                                                                                                                               |
 |         `import code from "./code.types"`          |           :x:           | `import type * as code from "./code.types"` Technically, could be `import type { default } from "./code.types"`, but types-only files pretty much never have default exports. |
 |           `export * from "./code.types"`           |           :x:           |                                                                      `export type * from "./code.types"`                                                                      |
 |         `export { X } from "./code.types"`         |           :x:           |                                                                    `export type { X } from "./code.types"`                                                                    |
@@ -75,7 +77,7 @@ These options adher to single schema, which is a **JSON object** with the follow
 - `pattern` of type `string` : the pattern, as `RegExp` source, to match the import/export target string literals against.
   Is treated verbatim, so to match relative-only imports/exports, use `\.` as first character.
   If using extensions in imports/exports, these must be included here too.
-  Default: `\..+\.types`.
+  Default: `\..+\.types$`.
 
 For more information, see [JSON schema specification and TS type in source code](./src/rule-helpers/options.ts).
 
