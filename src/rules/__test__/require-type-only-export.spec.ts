@@ -38,4 +38,10 @@ performTests(spec, MESSAGE_MISSING_EXTENSION, [
     name: "Type-only named export should already be considered valid",
     code: 'export type { X } from "./code.types"',
   },
+  {
+    name: "Partially-typed named export must become fully typed",
+    code: 'export { type X, Y } from "./code.types"',
+    fixedCode: 'export type {  X, Y } from "./code.types"',
+    node: AST_NODE_TYPES.ExportNamedDeclaration,
+  },
 ]);

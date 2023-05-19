@@ -42,6 +42,7 @@ export default ruleHelpers.createRule({
                 .getSourceCode()
                 .getTokens(node)
                 .find((t) => t.type === AST_PUNCTUATOR) ??
+              /* c8 ignore next 2 */
               doThrow(
                 "Failed to find Punctuator in tokens of ExportAllDeclaration.",
               );
@@ -65,19 +66,19 @@ export default ruleHelpers.createRule({
             node.source,
             function* (fixer) {
               const code = ctx.getSourceCode();
-              // Punctuator is the open-brace after
-              const tokens = code.getTokens(node);
-              // Punctuator is the open-brace after
-              const punctuator =
-                tokens.find((t) => t.type === AST_PUNCTUATOR) ??
-                doThrow("Failed to find punctuator in ExportNamedDeclaration.");
-
               if (node.exportKind === ruleHelpers.VALUE_KIND) {
+                // Punctuator is the open-brace after
+                const punctuator =
+                  code.getTokens(node).find((t) => t.type === AST_PUNCTUATOR) ??
+                  /* c8 ignore next 2 */
+                  doThrow(
+                    "Failed to find punctuator in ExportNamedDeclaration.",
+                  );
                 yield fixer.insertTextBefore(punctuator, "type ");
               }
 
               yield* node.specifiers
-                // All non-type specifier
+                // All type specifiers
                 .filter((spec) => spec.exportKind !== ruleHelpers.VALUE_KIND)
                 // Which actually have 'type' token
                 .map((spec) =>
@@ -103,6 +104,8 @@ const AST_PUNCTUATOR =
 const AST_IDENTIFIER =
   "Identifier" as const satisfies `${AST_TOKEN_TYPES.Identifier}`;
 
+/* c8 ignore start */
 const doThrow = (msg: string) => {
   throw new Error(msg);
 };
+/* c8 ignore stop */
