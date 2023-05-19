@@ -7,11 +7,13 @@ module.exports = {
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "plugin:jsdoc/recommended-typescript-error",
+    "plugin:type-only-import/recommended", // Reference to this ESLint plugin!
     "plugin:prettier/recommended",
     "plugin:sonarjs/recommended"
   ],
   plugins: [
     "jsdoc",
+    "type-only-import", // Reference to this ESLint plugin!
     "prettier"
   ],
   parser: "@typescript-eslint/parser",
@@ -54,6 +56,28 @@ module.exports = {
           "TSPropertySignature"
         ]
       }
+    ],
+    // Ensure that @typescript-eslint/utils imports are _always_ import with only "type" specifier.
+    "type-only-import/require-type-only-export": [
+      "error",
+      {
+        pattern: "@typescript-eslint/utils",
+      }
+    ],
+    "type-only-import/require-type-only-import": [
+      "error",
+      {
+        pattern: "@typescript-eslint/utils",
+      }
     ]
-  }
+  },
+  overrides: [
+    {
+      "files": ["**/__test__/*.ts"],
+      "rules": {
+        "type-only-import/require-type-only-export": ["off"],
+        "type-only-import/require-type-only-import": ["off"]
+      }
+    }
+  ]
 };
