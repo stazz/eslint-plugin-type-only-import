@@ -78,6 +78,8 @@ These options adher to single schema, which is a **JSON object** with the follow
   Is treated verbatim, so to match relative-only imports/exports, use `\.` as first character.
   If using extensions in imports/exports, these must be included here too.
   Default: `\..+\.types$`.
+- `disableFixer` of type `boolean` : If `true`, then none of the detected errors by this rule will be auto-fixed.
+  Default: `false`.
 
 For more information, see [JSON schema specification and TS type in source code](./src/rule-helpers/options.ts).
 
