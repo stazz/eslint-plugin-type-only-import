@@ -1,7 +1,8 @@
 /**
  * @file This file contains rule definition for "require-path-export-extension".
  */
-import { AST_TOKEN_TYPES, TSESTree } from "@typescript-eslint/utils";
+
+import type { AST_TOKEN_TYPES, TSESTree } from "@typescript-eslint/utils";
 import * as ruleHelpers from "../../rule-helpers";
 
 export const RULE_NAME = ruleHelpers.getRuleName(import.meta.url);
@@ -43,7 +44,7 @@ export default ruleHelpers.createRule({
                 .getTokens(node)
                 .find((t) => t.type === AST_PUNCTUATOR) ??
               /* c8 ignore next 2 */
-              doThrow(
+              ruleHelpers.doThrow(
                 "Failed to find Punctuator in tokens of ExportAllDeclaration.",
               );
 
@@ -66,16 +67,14 @@ export default ruleHelpers.createRule({
             node.source,
             function* (fixer) {
               const code = ctx.getSourceCode();
-              if (node.exportKind === ruleHelpers.VALUE_KIND) {
-                // Punctuator is the open-brace after
-                const punctuator =
-                  code.getTokens(node).find((t) => t.type === AST_PUNCTUATOR) ??
-                  /* c8 ignore next 2 */
-                  doThrow(
-                    "Failed to find punctuator in ExportNamedDeclaration.",
-                  );
-                yield fixer.insertTextBefore(punctuator, "type ");
-              }
+              // Punctuator is the open-brace after
+              const punctuator =
+                code.getTokens(node).find((t) => t.type === AST_PUNCTUATOR) ??
+                /* c8 ignore next 2 */
+                ruleHelpers.doThrow(
+                  "Failed to find punctuator in ExportNamedDeclaration.",
+                );
+              yield fixer.insertTextBefore(punctuator, "type ");
 
               yield* node.specifiers
                 // All type specifiers
@@ -103,9 +102,3 @@ const AST_PUNCTUATOR =
   "Punctuator" as const satisfies `${AST_TOKEN_TYPES.Punctuator}`;
 const AST_IDENTIFIER =
   "Identifier" as const satisfies `${AST_TOKEN_TYPES.Identifier}`;
-
-/* c8 ignore start */
-const doThrow = (msg: string) => {
-  throw new Error(msg);
-};
-/* c8 ignore stop */

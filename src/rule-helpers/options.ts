@@ -1,7 +1,8 @@
 /**
  * @file This file contains code related to rule options.
  */
-import { type JSONSchema4 } from "json-schema";
+
+import type { JSONSchema4 } from "json-schema";
 
 /**
  * The schema for rule options.

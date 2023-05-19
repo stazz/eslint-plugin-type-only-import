@@ -19,7 +19,7 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "tsBuildInfoFile": "./build/tsconfig.tsbuildinfo",
-    "skipLibCheck": true // Otherwise, we will get
+    "skipLibCheck": true, // Otherwise, we will get
     // node_modules/@typescript-eslint/types/dist/generated/ast-spec.d.ts:395:26 - error TS2430: Interface 'ClassExpression' incorrectly extends interface 'ClassBase'.
     //  Types of property 'abstract' are incompatible.
     //   Type 'undefined' is not assignable to type 'boolean'.

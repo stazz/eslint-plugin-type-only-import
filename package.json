@@ -66,7 +66,7 @@
     "build:run": "yarn run lint && yarn run tsc",
     "build:ci": "yarn run clear-build-artifacts && yarn run compile-d-ts-files && yarn run tsc --outDir ./dist-esm && yarn run tsc --module CommonJS --outDir ./dist-cjs && yarn run generate-stub-package-json-for-cjs && yarn run transpile-cjs-files && yarn run format-output-files",
     "clear-build-artifacts": "rm -rf dist dist-ts dist-cjs dist-esm build",
-    "compile-d-ts-files": "yarn run tsc --removeComments false --emitDeclarationOnly --declaration --declarationDir ./dist-ts && yarn run copy-d-ts-files && yarn run tsc:plain --project tsconfig.out.json",
+    "compile-d-ts-files": "yarn run tsc --removeComments false --emitDeclarationOnly --declaration --declarationDir ./dist-ts && yarn run tsc:plain --project tsconfig.out.json",
     "format-output-files": "yarn run format-output-files-ts && yarn run format-output-files-js",
     "format-output-files-ts": "eslint --no-eslintrc --config '.eslintrc.out-ts.cjs' --fix --fix-type layout './dist-ts/**/*.ts'",
     "format-output-files-js": "eslint --no-eslintrc --config '.eslintrc.out.cjs' --fix 'dist-cjs/**/*js' 'dist-esm/**/*js'",

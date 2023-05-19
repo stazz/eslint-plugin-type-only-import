@@ -1,6 +1,7 @@
 /**
  * @file This file contains code related to actual check performed by rule on a AST node for literal values.
  */
+
 import type { TSESTree, TSESLint } from "@typescript-eslint/utils";
 import type { FullOptions } from "./options";
 import type { Context } from "./creator";

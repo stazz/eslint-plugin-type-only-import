@@ -1,6 +1,7 @@
 /**
  * @file This file contains function to extract rule name, which is directory name of the file where the rule is defined.
  */
+
 import * as path from "node:path";
 /**
  * Gets the name of the rule, which is directory name of the file where the rule is defined.

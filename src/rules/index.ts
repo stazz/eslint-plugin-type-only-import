@@ -1,6 +1,7 @@
 /**
  * @file This file exports all the rules for this ESLint plugin.
  */
+
 import requirePathExportExtension, {
   RULE_NAME as RULE_NAME_REQUIRE_TYPE_ONLY_EXPORT_IMPORTED,
 } from "./require-type-only-export";

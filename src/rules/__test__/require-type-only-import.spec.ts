@@ -7,6 +7,7 @@ import { AST_NODE_TYPES } from "@typescript-eslint/utils";
 import setupAVA from "./setupAva";
 import performTests from "./performTests";
 import spec, { MESSAGE_MISSING_EXTENSION } from "../require-type-only-import";
+
 const node = AST_NODE_TYPES.ImportDeclaration;
 
 setupAVA(test);
@@ -26,15 +27,21 @@ performTests(spec, MESSAGE_MISSING_EXTENSION, [
     code: 'import type * as code from "./code.types"',
   },
   {
+    name: "Matching import should have 'type' as prefix of specifier",
+    code: 'import { X } from "./code.types"',
+    fixedCode: 'import type { X } from "./code.types"',
+    node,
+  },
+  {
     name: "Non-type namespace import should be correctly fixed",
-    code: 'import * as code, { type X } from "./code.types"',
-    fixedCode: 'import type * as code, { type X } from "./code.types"',
+    code: 'import code, { type X } from "./code.types"',
+    fixedCode: 'import type { default as code,    X } from "./code.types"',
     node,
   },
   {
     name: "Non-type named import should be correctly fixed",
-    code: 'import type * as code, { X } from "./code.types"',
-    fixedCode: 'import type * as code, { type X } from "./code.types"',
+    code: 'import code, { X } from "./code.types"',
+    fixedCode: 'import type { default as code,   X } from "./code.types"',
     node,
   },
   {
@@ -48,7 +55,7 @@ performTests(spec, MESSAGE_MISSING_EXTENSION, [
   {
     name: "Default imports should be changed to type-only named imports",
     code: 'import code from "./code.types"',
-    fixedCode: 'import type * as code from "./code.types"',
+    fixedCode: 'import type { default as code } from "./code.types"',
     node,
   },
 ]);

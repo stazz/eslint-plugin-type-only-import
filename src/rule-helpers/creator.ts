@@ -1,6 +1,7 @@
 /**
  * @file This file contains reusable callback to create ESLint rules specific to this package.
  */
+
 import type { ESLintUtils, TSESLint } from "@typescript-eslint/utils";
 import * as options from "./options";
 

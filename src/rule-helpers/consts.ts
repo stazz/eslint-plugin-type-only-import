@@ -1,6 +1,7 @@
 /**
  * @file This file constains constants used by rules.
  */
+
 import type { TSESTree } from "@typescript-eslint/utils";
 
 /**

@@ -19,18 +19,18 @@ The approach support by this plugin and which also fits nice with code coverage 
 The code coverage tools can be configured to exclude such files from their analysis, and this ESLint plugin can be configured to enforce `type` modifier for any `import` or `export` statements that target such files.
 
 Assuming the plugin would be configured to add `type` modifier to all imports/exports which have target string literal matching pattern `*.types` , here are few examples about valid and invalid code
-|                        code                        |        is valid         |                                                                                 auto-fixed to                                                                                 |
-| :------------------------------------------------: | :---------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-|       `import * as code from "./code.types"`       |           :x:           |                                                                  `import type * as code from "./code.types"`                                                                  |
-|          `import * as code from "./code"`          | :ballot_box_with_check: |                                           Target string literal does not match given pattern and thus the statement is unaffected.                                            |
-|    `import type * as code from "./code.types"`     |   :white_check_mark:    |                                                                                                                                                                               |
-| `import * as code, { type X } from "./code.types"` |           :x:           |                                                            `import type * as code, { type X } from "./code.types"`                                                            |
-| `import type * as code, { X } from "./code.types"` |           :x:           |                                                            `import type * as code, { type X } from "./code.types"`                                                            |
-|      `import type { X } from "./code.types"`       |   :white_check_mark:    |                                                                                                                                                                               |
-|      `import { type X } from "./code.types"`       |   :white_check_mark:    |                                                                                                                                                                               |
-|         `import code from "./code.types"`          |           :x:           | `import type * as code from "./code.types"` Technically, could be `import type { default } from "./code.types"`, but types-only files pretty much never have default exports. |
-|           `export * from "./code.types"`           |           :x:           |                                                                      `export type * from "./code.types"`                                                                      |
-|         `export { X } from "./code.types"`         |           :x:           |                                                                    `export type { X } from "./code.types"`                                                                    |
+|                     code                      |        is valid         |                                      auto-fixed to                                       |
+| :-------------------------------------------: | :---------------------: | :--------------------------------------------------------------------------------------: |
+|    `import * as code from "./code.types"`     |           :x:           |                       `import type * as code from "./code.types"`                        |
+|       `import * as code from "./code"`        | :ballot_box_with_check: | Target string literal does not match given pattern and thus the statement is unaffected. |
+|  `import type * as code from "./code.types"`  |   :white_check_mark:    |                                                                                          |
+| `import code, { type X } from "./code.types"` |           :x:           |                 `import type { default as code, X } from "./code.types"`                 |
+|   `import code, { X } from "./code.types"`    |           :x:           |                 `import type { default as code, X } from "./code.types"`                 |
+|    `import type { X } from "./code.types"`    |   :white_check_mark:    |                                                                                          |
+|    `import { type X } from "./code.types"`    |   :white_check_mark:    |                                                                                          |
+|       `import code from "./code.types"`       |           :x:           |                  `import type { default as code } from "./code.types"`                   |
+|        `export * from "./code.types"`         |           :x:           |                           `export type * from "./code.types"`                            |
+|      `export { X } from "./code.types"`       |           :x:           |                         `export type { X } from "./code.types"`                          |
 
 # Installation
 Assuming that ESLint has already been installed
