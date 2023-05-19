@@ -64,16 +64,9 @@ jobs:
 
           ./scripts/test.sh coverage
 
-      - id: lint
-        name: Lint
-        shell: bash
-        run: |
-          set -e
-          
-          ./scripts/lint.sh
-
       # Run build *after* tests - since tests no longer require transpiled JS to run
       # We still want to run build to catch any TS error possibly lurking somewhere.
+      # Run compile _before_ linting, as this ESLint plugin itself will be used during linting.
       - id: compile
         name: Compile
         shell: bash
@@ -81,7 +74,14 @@ jobs:
           set -e
 
           ./scripts/build.sh ci
+
+      - id: lint
+        name: Lint
+        shell: bash
+        run: |
+          set -e
           
+          ./scripts/lint.sh
 
       # - id: coverage
       #   name: Upload coverage

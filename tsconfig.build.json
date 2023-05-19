@@ -1,0 +1,12 @@
+// TS config file to use to compile .ts files in CI.
+{
+  "extends": "./tsconfig.json",
+  "exclude": [
+    // Don't compile any of the tests files, thus avoiding need to move them around in CI pipeline.
+    "src/**/__test__/*"
+  ],
+  "compilerOptions": {
+    // We don't want dangling // eslint-disable-xyz comments, as that will cause errors during formatting output .[m]js files.
+    "removeComments": true
+  },
+}
